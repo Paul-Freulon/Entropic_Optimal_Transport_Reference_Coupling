@@ -51,9 +51,9 @@ def cov_eot_prior(A, B, reg=0, Sigma=np.eye(4)):
 
 def integrate_expmat_OU(time, drift_mat, diff_mat):
     """
-    If  F = drift_mat and G = diff_mat,
-    for the purpose of studying the SDE: dX_t = -F X_t dt + G dW_t,
-    we compute the integral int_0^time exp(s F)GG^T exp(sF^T)ds.
+    If  K = drift_mat and L = diff_mat,
+    for the purpose of studying the SDE: dX_t = -K X_t dt + L dW_t,
+    we compute the integral int_0^time exp(s K)LL^T exp(sK^T)ds.
     """
     time_grid = np.linspace(0, time, num=int(np.ceil(time*100)))
     delta_t = time_grid[1]-time_grid[0]
@@ -66,8 +66,8 @@ def integrate_expmat_OU(time, drift_mat, diff_mat):
 
 def var_mat_OU(time, drift_mat, diff_mat, init_mat=np.array([[0,0],[0,0]])):
     """
-    Set F = drift_mat and G=diff_mat.
-    Study the SDE dX_t = -F X_t dt + G dW_t 
+    Set K = drift_mat and L=diff_mat.
+    Study the SDE dX_t = -K X_t dt + L dW_t 
     With inital condition X_0 sim N(A_0) where A_0 = init_mat
     the output is the 2 times 2 covariance matrix of X_t.
     """
@@ -84,8 +84,8 @@ def var_mat_OU(time, drift_mat, diff_mat, init_mat=np.array([[0,0],[0,0]])):
 def cross_cov_OU(t_0, t_1, drift_mat, diff_mat,
                  init_mat=np.array([[0,0],[0,0]])):
     """
-    With F = drift_mat, G = diff_mat.
-    The SDE is dX_t = -F X_t dt + G dW_t
+    K = drift_mat, L = diff_mat.
+    The SDE is dX_t = -F X_t dt + L dW_t
     The output is the cross covariance between X_{t_0} and X_{t_1}.
     That is E(X_{t_0}X_{t_1}^T).
     """
@@ -118,8 +118,7 @@ def cov_two_times_OU(t_0, t_1, drift_mat, diff_mat,
 
 def grid_marge_var(t_grid, drift_mat, diff_mat, init_mat=np.eye(2)):
     """
-    Compute the marginal covariances at the n times given by t_grid.
-
+    Compute the marginal covariances at the n times of t_grid.
     """
     marginal_storage = []
     for time in t_grid:
@@ -130,11 +129,11 @@ def grid_marge_var(t_grid, drift_mat, diff_mat, init_mat=np.eye(2)):
     
     return marginal_storage
 
-def grid_ref_cov(t_grid, drift_mat, diff_mat,
+def grid_ref_cov_OU(t_grid, drift_mat, diff_mat,
                  init_mat=np.array([[0,0],[0,0]])):
     """
     If there are n different times in t_grid, this function computes the 
-    n-1 covariances of two successive times for the OU dynamic. 
+    n-1 covariances coupling successive times for the OU dynamic. 
     It returns the list of the n-1 reference coupling covariances.
     """
     ref_cov_storage = []
@@ -147,8 +146,67 @@ def grid_ref_cov(t_grid, drift_mat, diff_mat,
         ref_cov_storage.append(ref_cov)
     return ref_cov_storage
 
+def kernel_fBm(t_min, t_max, H=1/2):
+    """
+    Scalar kernel for the fractional Brownian motion.
+    """
+    temp = (t_max+1)**(2*H) + (t_min+1)**(2*H) - (t_max-t_min)**(2*H)
+    const = 2 * (t_max+1)**(2*H)
+    return temp/const
+
+def couple_cov_fBm(t_min, t_max, H=1/2):
+    """
+    Coupling covariance for 2 dimensional fractional Brownian motion
+    with independent coordinates.
+    """
+    rho = kernel_fBm(t_min=t_min, t_max=t_max, H=H)
+    couple_cov = np.block([[np.eye(2), rho*np.eye((2))],
+                        [rho*np.eye(2), np.eye(2)]])
+    return couple_cov
 
 
+def grid_ref_cov_fBm(t_grid, H=1/2):
+    """
+    Coupling reference computed at every time of the grid. The reference
+    dynamic is a fractional brownian motion rescaled in order to have 
+    constant variance equal to one.
+    """
+    ref_cov_storage = []
+    n = len(t_grid)
+    for i in range(n-1):
+        t_0 = t_grid[i]
+        t_1 = t_grid[i+1]
+        ref_cov = couple_cov_fBm(t_min=t_0, t_max=t_1, H=H)
+        ref_cov_storage.append(ref_cov)
+    return ref_cov_storage
+
+def kernel_heat(t_min, t_max, sigma=1):
+    """
+    Scalar heat kernel rho(t,s)=exp(-(t-s)^2/(2sigma^2)).
+    """
+    sq_dist = (t_max-t_min)**2
+    return np.exp(-sq_dist/(2*sigma**2))
+
+def couple_cov_heat(t_min, t_max, sigma=1):
+    rho = kernel_heat(t_min=t_min, t_max=t_max, sigma=sigma)
+    couple_cov = np.block([[np.eye(2), rho*np.eye((2))],
+                        [rho*np.eye(2), np.eye(2)]])
+    return couple_cov
+    
+
+def grid_ref_cov_heat(t_grid, sigma=1):
+    """
+    Coupling reference computed at every time of the grid. The reference
+    dynamic is defined by the heat kernel with independ coordinates.
+    """
+    ref_cov_storage = []
+    n = len(t_grid)
+    for i in range(n-1):
+        t_0 = t_grid[i]
+        t_1 = t_grid[i+1]
+        ref_cov = couple_cov_heat(t_min=t_0, t_max=t_1, sigma=sigma)
+        ref_cov_storage.append(ref_cov)
+    return ref_cov_storage
 
 def sample_given_marginal(sample_first_marg, couple_cov):
     """

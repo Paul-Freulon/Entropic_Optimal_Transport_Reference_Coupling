@@ -25,9 +25,9 @@ random.seed(42)
 
 # True diffusion parameters
 
-Drift = np.array([[3,0],[1,3]]) # Drift matrix
-Diffu = np.eye(2)               # Diffusion matrix
-init_var= 10*np.eye(2)      # Covariance at time zero
+Drift = np.array([[2.5,0],[1,2.5]]) # Drift matrix
+Diffu = 0.5*np.eye(2)               # Diffusion matrix
+init_var= 10*np.eye(2)          # Covariance at time zero
 
 # Prior diffusion parameters
 
@@ -40,7 +40,7 @@ init_var_prior = 5*np.eye(2)       # Prior initial covariance matrix
 time = 0.5
 time_bis = 2
 n_times = 100
-time_grid = np.linspace(0.1, 1, num=n_times) 
+time_grid = np.linspace(0.01, 1, num=n_times) 
 
 #%%
 
@@ -70,10 +70,10 @@ print(eigh(cov_OU_2times)[0])
 n_sample = 10
 
 #Compute the coupling covariances between times (t_i,t_i+1) for all i.
-prior_cov_grid = grid_ref_cov(time_grid, drift_mat=Drift, diff_mat=Diffu, 
+prior_cov_grid = grid_ref_cov_OU(time_grid, drift_mat=Drift, diff_mat=Diffu, 
                               init_mat=init_var)
 
-misspec_prior_grid = grid_ref_cov(time_grid, drift_mat=Drift_prior, 
+misspec_prior_grid = grid_ref_cov_OU(time_grid, drift_mat=Drift_prior, 
                                  diff_mat=Diffu_prior, 
                                 init_mat=init_var_prior)
 
@@ -101,7 +101,7 @@ for it, n_marg in enumerate(n_marg_grid):
 #times where the marginals are available
     loc_time_grid = np.linspace(0.1, 1, num=n_marg)
     
-    prior_grid = grid_ref_cov(loc_time_grid, 
+    prior_grid = grid_ref_cov_OU(loc_time_grid, 
                                       drift_mat=Drift, 
                                       diff_mat=Diffu, 
                                       init_mat=init_var)
@@ -284,13 +284,12 @@ path_EOTmissprior_vareps = [path_EOTmissprior_Smalleps,
                             path_EOTmissprior_Medeps,
                             path_EOTmissprior_Bigeps]
 
-# %%
-#Display paths of the diffusion
+# %% Display paths of the diffusion
 
 #3D display
 fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
 
-for i in range(5):
+for i in range(n_sample):
     ax.plot(time_grid, path_storage[i,:,0], path_storage[i,:,1])
 
 ax.set_xlabel("time")
@@ -303,7 +302,7 @@ ax.set_ylim([-3, 3])
 ax.set_zlim([-3, 3])
 
 ax.set_title("Paths constructed from the diffusion")
-plt.savefig('sample_diffpaths_3d.pdf', format='pdf')
+plt.savefig('Figures_EOTReference/sample_diffpaths_3d.pdf', format='pdf')
 
 plt.figure(figsize=(6,5))
 plt.title("Number of margins = {}".format(n_times), size=14)
@@ -311,7 +310,7 @@ plt.xlim(-3, 3)
 plt.ylim(-3, 3)
 for i in range(n_sample):
     plt.plot(path_storage[i,:,0], path_storage[i,:,1])
-plt.savefig('2DPath_diffusion.pdf', format='pdf')
+plt.savefig('Figures_EOTReference/2DPath_diffusion.pdf', format='pdf')
 
 
 
@@ -326,7 +325,8 @@ for it, n_marg in enumerate(n_marg_grid):
     plt.ylim(-3, 3)
     for i in range(n_sample):
         plt.plot(path[i,:,0], path[i,:,1])
-    plt.savefig('2DPath_diffusion_timediscr.pdf', format='pdf')
+    plt.savefig('Figures_EOTReference/2DPath_diffusion_timediscr.pdf',
+                format='pdf')
 
 # %% Display paths built from optimal transport with different values of 
 # reference couplings and large epsilon
@@ -350,7 +350,8 @@ ax.set_zlim([-3, 3])
 
 ax.set_title("Independent reference "+
              r"and $\varepsilon$ = {}".format(eps))
-plt.savefig('Path_3D_Indepref_Larg_Eps.pdf', format='pdf')
+plt.savefig('Figures_EOTReference/Path_3D_Indepref_Larg_Eps.pdf', 
+            format='pdf')
 
 
 fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
@@ -368,7 +369,8 @@ ax.set_ylim([-3, 3])
 ax.set_zlim([-3, 3])
 ax.set_title("Well-specified "+
              r"reference and $\varepsilon$ = {}".format(eps))
-plt.savefig('Path_3D_Wellspec_Larg_Eps.pdf', format='pdf')
+plt.savefig('Figures_EOTReference/Path_3D_Wellspec_Larg_Eps.pdf',
+            format='pdf')
 
 
 fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
@@ -385,7 +387,8 @@ ax.set_ylim([-3, 3])
 ax.set_zlim([-3, 3])
 ax.set_title("Misspecified "+
              r"reference and $\varepsilon$ = {}".format(eps))
-plt.savefig('Path_3D_Misspec_Larg_Eps.pdf', format='pdf')
+plt.savefig('Figures_EOTReference/Path_3D_Misspec_Larg_Eps.pdf', 
+            format='pdf')
 
 
 fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
@@ -404,7 +407,8 @@ ax.set_xlim([-0.1, 1.1])
 ax.set_ylim([-3, 3])
 ax.set_zlim([-3, 3])
 ax.set_title("Unregularized optimal transport")
-plt.savefig('Path_3D_UnregOT.pdf', format='pdf')
+plt.savefig('Figures_EOTReference/Path_3D_UnregOT.pdf',
+            format='pdf')
 
 
 # %% Display paths built from entropic OT with different reference couplings
@@ -477,7 +481,7 @@ for i in range(n_sample):
     ax.set_xlim([-3, 3])
     ax.set_xlim([-3, 3])
 
-ax.set_title("Paths from the diffusion", size=20)
+ax.set_title("Figures_EOTReference/Paths from the diffusion", size=20)
 
     
 
@@ -497,7 +501,7 @@ for i in range(n_sample):
     ax.set_xlim([-3, 3])
     ax.set_xlim([-3, 3])
 
-ax.set_title(r"Well-specified reference and $\varepsilon = {}$".format(eps),
+ax.set_title(r"Figures_EOTReference/Well-specified reference and $\varepsilon = {}$".format(eps),
              size=20)
 
 
@@ -522,7 +526,8 @@ for it, vareps in enumerate(eps_grid):
     plt.title(r"$\varepsilon = {}$".format(vareps), size=14)
     for i in range(n_sample):
         plt.plot(path[i,:,0], path[i,:,1])
-plt.savefig('Indepcoupling_sampling_2dim_proj.pdf', format='pdf')
+plt.savefig('Figures_EOTReference/Indepcoupling_sampling_2dim_proj.pdf', 
+            format='pdf')
 
 
 fig = plt.figure(figsize=(18,5))
@@ -536,7 +541,8 @@ for it, vareps in enumerate(eps_grid):
     plt.title(r"$\varepsilon = {}$".format(vareps), size=14)
     for i in range(n_sample):
         plt.plot(path[i,:,0], path[i,:,1])
-plt.savefig('Goodrefe_sampling_2dim_proj.pdf', format='pdf')
+plt.savefig('Figures_EOTReference/Goodrefe_sampling_2dim_proj.pdf',
+            format='pdf')
       
 
 fig = plt.figure(figsize=(18,5))
@@ -550,7 +556,8 @@ for it, vareps in enumerate(eps_grid):
     plt.title(r"$\varepsilon = {}$".format(vareps), size=14)
     for i in range(n_sample):
         plt.plot(path[i,:,0], path[i,:,1])
-plt.savefig('Misspec_refe_sampling_2dim_proj.pdf', format='pdf')
+plt.savefig('Figures_EOTReference/Misspec_refe_sampling_2dim_proj.pdf',
+            format='pdf')
 
 
 #%% Impact of time discretization for independent and misspecified reference
@@ -571,7 +578,7 @@ for it, n_marg in enumerate(n_marg_grid):
     eot_prod_storage = []
     eot_refe_storage = []
     
-    misspec_prior_grid = grid_ref_cov(loc_time_grid, 
+    misspec_prior_grid = grid_ref_cov_OU(loc_time_grid, 
                                       drift_mat=Drift_prior, 
                                       diff_mat=Diffu_prior, 
                                       init_mat=init_var_prior)
@@ -617,7 +624,8 @@ for it, n_marg in enumerate(n_marg_grid):
     plt.ylim(-3, 3)
     for i in range(n_sample):
         plt.plot(path[i,:,0], path[i,:,1])
-    plt.savefig('2DPath_indep_ref_timediscr.pdf', format='pdf')
+    plt.savefig('Figures_EOTReference/2DPath_indep_ref_timediscr.pdf', 
+                format='pdf')
 
 
 fig = plt.figure(figsize=(18,5))
@@ -631,4 +639,5 @@ for it, n_marg in enumerate(n_marg_grid):
     plt.ylim(-3, 3)
     for i in range(n_sample):
         plt.plot(path[i,:,0], path[i,:,1])
-    plt.savefig('2DPath_Misspec_ref_timediscr.pdf', format='pdf')
+    plt.savefig('Figures_EOTReference/2DPath_Misspec_ref_timediscr.pdf', 
+                format='pdf')
