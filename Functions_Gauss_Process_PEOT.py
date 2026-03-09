@@ -55,7 +55,7 @@ def integrate_expmat_OU(time, drift_mat, diff_mat):
     for the purpose of studying the SDE: dX_t = -K X_t dt + L dW_t,
     we compute the integral int_0^time exp(s K)LL^T exp(sK^T)ds.
     """
-    time_grid = np.linspace(0, time, num=int(np.ceil(time*100)))
+    time_grid = np.linspace(0, time, num=max(int(np.ceil(time*100)),2))
     delta_t = time_grid[1]-time_grid[0]
     grid_exp_mat = [expm(s*drift_mat)@diff_mat for s in time_grid]
     grid_to_sum = [M@np.transpose(M) for M in grid_exp_mat]

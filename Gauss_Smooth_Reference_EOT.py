@@ -31,3 +31,23 @@ init_var= 10*np.eye(2)          # Covariance at time zero
 
 n_times = 100
 time_grid = np.linspace(0.01, 1, num=n_times) 
+
+
+#%% 
+
+#Time marginal
+marginal_grid = grid_marge_var(t_grid = time_grid, drift_mat= Drift, 
+                               diff_mat=Diffu, init_mat= init_var)
+
+#Reference coupling with fractional Brownian motion kernel
+H = 0.95 #Hurst index of the fBm
+
+ref_cov_grid_fBm = grid_ref_cov_fBm(t_grid=time_grid, H=H)
+
+#Reference coupling with heat kernel
+
+ref_cov_grid_heat = grid_ref_cov_heat(t_grid=time_grid)
+
+
+
+
