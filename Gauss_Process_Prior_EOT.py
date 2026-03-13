@@ -14,7 +14,7 @@ from scipy.linalg import pinv
 from numpy.linalg import eigh
 from Functions_Gauss_Process_PEOT import *
 import random
-random.seed(42)
+random.seed(1)
 
 
 #In this script the marginal vectors are of dimension 2
@@ -79,25 +79,27 @@ ax.set_zlabel("y")
 ax.set_xlim([-0.1, 1.1])
 ax.set_ylim([-3, 3])
 ax.set_zlim([-3, 3])
-
-ax.set_title("Paths constructed from the diffusion")
+#ax.set_title("Paths constructed from the diffusion")
 plt.savefig('Figures_EOTReference/sample_diffpaths_3d.pdf', format='pdf')
 
 
 fig = plt.figure(figsize=(18,11))
-plt.suptitle(r"Path sampled from the diffusion",
-             size=20)
+#plt.suptitle(r"Path sampled from the diffusion", size=20)
 for it, n_marg in enumerate(n_marg_grid):
     path = sample_truepath_time[it]
     plt.subplot(2,3,it+1)
     plt.title("Number of margins = {}".format(n_marg), size=14)
     plt.xlim(-3, 3)
     plt.ylim(-3, 3)
+    plt.xlabel('x', size=15)
+    plt.ylabel('y', size=15)
     for i in range(n_sample):
         plt.plot(path[i,:,0], path[i,:,1])
     plt.subplot(2,3,it+4)
     for i in range(n_sample):
         plt.plot(np.linspace(time_init, time_final, num=n_marg), path[i,:,0])
+        plt.xlabel('time', size=15)
+        plt.ylabel('x', size=15)
     plt.savefig('Figures_EOTReference/2DPath_diffusion_timediscr.pdf',
                 format='pdf')
 
@@ -185,17 +187,21 @@ for it, n_marg in enumerate(n_marg_grid):
 #%% Display paths
 
 fig = plt.figure(figsize=(18,11))
-plt.suptitle(r"Independent reference and $\varepsilon={}$".format(eps),
-             size=20)
+
 for it, n_marg in enumerate(n_marg_grid):
     path = sample_indep_time[it]
     plt.subplot(2,3,it+1)
     plt.title("Number of margins = {}".format(n_marg), size=14)
     plt.xlim(-3, 3)
     plt.ylim(-3, 3)
+    plt.xlabel('x', size=15)
+    plt.ylabel('y', size=15)
     for i in range(n_sample):
         plt.plot(path[i,:,0], path[i,:,1])
     plt.subplot(2,3,it+4)
+    plt.ylim(-4, 4)
+    plt.xlabel('time', size=15)
+    plt.ylabel('x', size=15)
     for i in range(n_sample):
         plt.plot(np.linspace(time_init, time_final, num=n_marg), path[i,:,0])
     plt.savefig('Figures_EOTReference/2DPath_indep_ref_timediscr.pdf', 
@@ -203,35 +209,40 @@ for it, n_marg in enumerate(n_marg_grid):
 
 
 fig = plt.figure(figsize=(18,11))
-plt.suptitle(r"Brownian motion reference and $\varepsilon={}$".format(eps), 
-             size=20)
 for it, n_marg in enumerate(n_marg_grid):
     path = sample_brown_time[it]
     plt.subplot(2,3,it+1)
     plt.title("Number of margins = {}".format(n_marg), size=14)
     plt.xlim(-3, 3)
     plt.ylim(-3, 3)
+    plt.xlabel('x', size=15)
+    plt.ylabel('y', size=15)
     for i in range(n_sample):
         plt.plot(path[i,:,0], path[i,:,1])
     plt.subplot(2,3,it+4)
+    plt.ylim(-4, 4)
+    plt.xlabel('time', size=15)
+    plt.ylabel('x', size=15)
     for i in range(n_sample):
          plt.plot(np.linspace(time_init, time_final, num=n_marg), path[i,:,0])
     plt.savefig('Figures_EOTReference/2DPath_brown_ref_timediscr.pdf', 
                 format='pdf')
     
 fig = plt.figure(figsize=(18,11))
-plt.suptitle("Fraction Brownian motion reference with H={}".format(H)
-             +r" and $\varepsilon={}$".format(eps), 
-             size=20)
 for it, n_marg in enumerate(n_marg_grid):
     path = sample_fBmH_time[it]
     plt.subplot(2,3,it+1)
     plt.title("Number of margins = {}".format(n_marg), size=14)
     plt.xlim(-3, 3)
     plt.ylim(-3, 3)
+    plt.xlabel('x', size=15)
+    plt.ylabel('y', size=15)
     for i in range(n_sample):
         plt.plot(path[i,:,0], path[i,:,1])
     plt.subplot(2,3,it+4)
+    plt.ylim(-4, 4)
+    plt.xlabel('time', size=15)
+    plt.ylabel('x', size=15)
     for i in range(n_sample):
          plt.plot(np.linspace(time_init, time_final, num=n_marg), path[i,:,0])
     plt.savefig('Figures_EOTReference/2DPath_fBmH_ref_timediscr.pdf', 
@@ -239,19 +250,22 @@ for it, n_marg in enumerate(n_marg_grid):
 
 
 fig = plt.figure(figsize=(18,11))
-plt.suptitle(r"Heat kernel reference and $\varepsilon={}$".format(eps), 
-             size=20)
 for it, n_marg in enumerate(n_marg_grid):
     path = sample_heat_time[it]
     plt.subplot(2,3,it+1)
     plt.title("Number of margins = {}".format(n_marg), size=14)
     plt.xlim(-3, 3)
     plt.ylim(-3, 3)
+    plt.xlabel('x', size=15)
+    plt.ylabel('y', size=15)
     for i in range(n_sample):
         plt.plot(path[i,:,0], path[i,:,1])
     plt.subplot(2,3,it+4)
+    plt.xlabel('time', size=15)
+    plt.ylabel('x', size=15)
     for i in range(n_sample):
-         plt.plot(np.linspace(time_init, time_final, num=n_marg), path[i,:,0])
+        plt.ylim(-4, 4)
+        plt.plot(np.linspace(time_init, time_final, num=n_marg), path[i,:,0])
     plt.savefig('Figures_EOTReference/2DPath_heat_ref_timediscr.pdf', 
                 format='pdf')
 
