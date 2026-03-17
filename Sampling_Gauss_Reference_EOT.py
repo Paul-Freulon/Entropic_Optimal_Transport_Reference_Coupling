@@ -7,6 +7,7 @@ Created on Tue Jan 27 17:21:21 2026
 """
 import numpy as np
 import matplotlib.pyplot as plt
+import session_info 
 from numpy.random import multivariate_normal
 from scipy.linalg import sqrtm
 from scipy.linalg import expm
@@ -16,6 +17,8 @@ from Functions_Gauss_Process_Sampling import *
 from Functions_EOT_Ref_Coupling import *
 import random
 random.seed(1)
+
+session_info.show(html=False)
 
 
 #In this script the marginal vectors are of dimension 2

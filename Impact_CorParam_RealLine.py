@@ -10,8 +10,11 @@ Created on Thu May 15 10:40:46 2025
 
 import numpy as np
 import matplotlib.pyplot as plt
+import session_info
 from Functions_EOT_Ref_Coupling import *
 from scipy.stats import multivariate_normal
+
+session_info.show(html=False)
 
 # In this script we compute the Gaussian entropic optimal transport for 
 # a set of different regularization parameters. For illustration purposes,
