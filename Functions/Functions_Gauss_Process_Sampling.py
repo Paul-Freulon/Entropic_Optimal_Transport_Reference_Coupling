@@ -193,6 +193,31 @@ def grid_ref_cov_heat(t_grid, sigma=1):
 cplcov_grid_heat = grid_ref_cov_heat(np.linspace(0,1, num=7))
 print(len(cplcov_grid_heat))
 
+def couple_cov_mix(t_min, t_max, H=0.25, sigma=1):
+    rho_fbm = kernel_fBm(t_min=t_min, t_max=t_max,H=H)
+    rho_heat = kernel_heat(t_min=t_min, t_max=t_max, sigma=sigma)
+    rho_mat = np.diag((rho_fbm, rho_heat))
+    couple_cov = np.block([[np.eye(2), rho_mat],
+                        [rho_mat, np.eye(2)]])
+    return couple_cov
+
+print('Coupling with mixed regularity')
+
+def grid_ref_covmix(t_grid, H=0.25,  sigma=1):
+    """
+    Coupling reference computed at every time of the grid. The reference
+    dynamic is defined by the fBM kernel for the first coordinates, and by
+    a heat kernel for the second coordinate.
+    """
+    ref_cov_storage = []
+    n = len(t_grid)
+    for i in range(n-1):
+        t_0 = t_grid[i]
+        t_1 = t_grid[i+1]
+        ref_cov = couple_cov_mix(t_min=t_0, t_max=t_1, H=H, sigma=sigma)
+        ref_cov_storage.append(ref_cov)
+    return ref_cov_storage
+
 def sample_given_marginal(sample_X, couple_cov):
     """
     Given Gaussian X sim N(A) and block coupling covariance (A & C\\ C^T & B),

@@ -13,6 +13,8 @@ from scipy.linalg import sqrtm
 from scipy.linalg import expm
 from scipy.linalg import pinv
 from numpy.linalg import eigh
+import sys
+sys.path.append('../Functions/')
 from Functions_Gauss_Process_Sampling import *
 from Functions_EOT_Ref_Coupling import *
 import random
@@ -74,7 +76,7 @@ ax.set_zlabel("y")
 ax.set_xlim([-0.1, 1.1])
 ax.set_ylim([-3, 3])
 ax.set_zlim([-3, 3])
-plt.savefig('Figures_EOTReference/sample_diffpaths_3d.pdf', format='pdf')
+plt.savefig('../Figures_EOTReference/sample_diffpaths_3d.pdf', format='pdf')
 
 #2D display
 
@@ -95,7 +97,7 @@ for it, n_marg in enumerate(n_marg_grid):
         plt.ylim(-3, 3)
         plt.xlabel('time', size=15)
         plt.ylabel('x', size=15)
-    plt.savefig('Figures_EOTReference/2DPath_diffusion_timediscr.pdf',
+    plt.savefig('../Figures_EOTReference/2DPath_diffusion_timediscr.pdf',
                 format='pdf')
 
 
@@ -204,7 +206,7 @@ for it, n_marg in enumerate(n_marg_grid):
     plt.ylabel('x', size=15)
     for i in range(n_sample):
         plt.plot(np.linspace(time_init, time_final, num=n_marg), path[i,:,0])
-    plt.savefig('Figures_EOTReference/2DPath_indep_ref_timediscr.pdf', 
+    plt.savefig('../Figures_EOTReference/2DPath_indep_ref_timediscr.pdf', 
                 format='pdf')
 
 
@@ -225,7 +227,7 @@ for it, n_marg in enumerate(n_marg_grid):
     plt.ylabel('x', size=15)
     for i in range(n_sample):
          plt.plot(np.linspace(time_init, time_final, num=n_marg), path[i,:,0])
-    plt.savefig('Figures_EOTReference/2DPath_brown_ref_timediscr.pdf', 
+    plt.savefig('../Figures_EOTReference/2DPath_brown_ref_timediscr.pdf', 
                 format='pdf')
     
 fig = plt.figure(figsize=(18,11))
@@ -245,7 +247,7 @@ for it, n_marg in enumerate(n_marg_grid):
     plt.ylabel('x', size=15)
     for i in range(n_sample):
          plt.plot(np.linspace(time_init, time_final, num=n_marg), path[i,:,0])
-    plt.savefig('Figures_EOTReference/2DPath_fBmH_ref_timediscr.pdf', 
+    plt.savefig('../Figures_EOTReference/2DPath_fBmH_ref_timediscr.pdf', 
                 format='pdf')
 
 
@@ -266,7 +268,7 @@ for it, n_marg in enumerate(n_marg_grid):
     for i in range(n_sample):
         plt.ylim(-4, 4)
         plt.plot(np.linspace(time_init, time_final, num=n_marg), path[i,:,0])
-    plt.savefig('Figures_EOTReference/2DPath_heat_ref_timediscr.pdf', 
+    plt.savefig('../Figures_EOTReference/2DPath_heat_ref_timediscr.pdf', 
                 format='pdf')
 
 # %% 3D display of paths built from entropic OT couplings 
@@ -288,7 +290,7 @@ ax.set_zlim([-3, 3])
 
 ax.set_title("Independent reference "+
              r"and $\varepsilon$ = {}".format(eps))
-plt.savefig('Figures_EOTReference/Path_3D_EOT_Indepref.pdf', 
+plt.savefig('../Figures_EOTReference/Path_3D_EOT_Indepref.pdf', 
             format='pdf')
 
 # Brownian motion reference
@@ -308,7 +310,7 @@ ax.set_ylim([-3, 3])
 ax.set_zlim([-3, 3])
 ax.set_title("Brownian motion "+
              r"reference and $\varepsilon$ = {}".format(eps))
-plt.savefig('Figures_EOTReference/Paths_3D_EOT_brown_ref.pdf',
+plt.savefig('../Figures_EOTReference/Paths_3D_EOT_brown_ref.pdf',
             format='pdf')
 
 # fraction Brownian motion reference
@@ -328,7 +330,7 @@ ax.set_ylim([-3, 3])
 ax.set_zlim([-3, 3])
 ax.set_title("Fractional Brownian motion - H={}".format(H)+
              r" and $\varepsilon$ = {}".format(eps))
-plt.savefig('Figures_EOTReference/Paths_3D_fBmH_ref.pdf',
+plt.savefig('../Figures_EOTReference/Paths_3D_fBmH_ref.pdf',
             format='pdf')
 
 # fraction Brownian motion reference
@@ -348,7 +350,7 @@ ax.set_ylim([-3, 3])
 ax.set_zlim([-3, 3])
 ax.set_title("Heat kernel reference"
              r" and $\varepsilon$ = {}".format(eps))
-plt.savefig('Figures_EOTReference/Paths_3D_heat_ref.pdf',
+plt.savefig('../Figures_EOTReference/Paths_3D_heat_ref.pdf',
             format='pdf')
 
 

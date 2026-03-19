@@ -11,6 +11,8 @@ Created on Thu May 15 10:40:46 2025
 import numpy as np
 import matplotlib.pyplot as plt
 import session_info
+import sys
+sys.path.append('../Functions')
 from Functions_EOT_Ref_Coupling import *
 from scipy.stats import multivariate_normal
 
@@ -58,7 +60,7 @@ for it, reg in enumerate(eps_grid_small):
     plt.contourf(X, Y, pdf_2d, cmap='viridis')
     plt.title(r'$\varepsilon=$'+str(reg)+r' and $\rho=0$', fontsize=20)
 
-plt.savefig('Figures_EOTReference/EOT_2D_Gaussian_varepsilon.pdf',
+plt.savefig('../Figures_EOTReference/EOT_2D_Gaussian_varepsilon.pdf',
             format='pdf')
 
 #Second set of experiment - variation of the reference correlation
@@ -86,7 +88,7 @@ for it, rho in enumerate(rho_grid_small):
     plt.contourf(X, Y, pdf_2d, cmap='viridis')
     plt.title(r'$\varepsilon=2$ and $\rho=$'+str(rho), fontsize=20)
 
-plt.savefig('Figures_EOTReference/EOT_2D_Gaussian_priorcov.pdf',
+plt.savefig('../Figures_EOTReference/EOT_2D_Gaussian_priorcov.pdf',
             format='pdf')
 
 n_eps = len(eps_grid_small)
@@ -112,7 +114,7 @@ for i in range(n_eps):
     plt.ylabel(r'$W_{\Sigma}^{\varepsilon}-W_2^2$', fontsize=15)
     plt.xlim((-0.02, 1.01))
 
-plt.savefig('Figures_EOTReference/Eot_curve_impact_correlation_ref.pdf',
+plt.savefig('../Figures_EOTReference/Eot_curve_impact_correlation_ref.pdf',
             format='pdf' )
 
 # Excess of entropic optimal transport for varying epsilon
@@ -140,6 +142,6 @@ for i in range(n_rho_small):
     plt.xlabel(r'$\varepsilon$', fontsize=15)
     plt.ylabel(r'$W_{\Sigma}^{\varepsilon}-W_2^2$', fontsize=15)
 
-plt.savefig('Figures_EOTReference/Eot_curve_impact_epsilon_param.pdf',
+plt.savefig('../Figures_EOTReference/Eot_curve_impact_epsilon_param.pdf',
             format = 'pdf')
  
