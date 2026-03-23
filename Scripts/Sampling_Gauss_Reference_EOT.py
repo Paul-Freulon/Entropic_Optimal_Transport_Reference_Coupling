@@ -13,6 +13,7 @@ from scipy.linalg import sqrtm
 from scipy.linalg import expm
 from scipy.linalg import pinv
 from numpy.linalg import eigh
+from time import time
 import sys
 sys.path.append('../Functions/')
 from Functions_Gauss_Process_Sampling import *
@@ -22,6 +23,7 @@ random.seed(1)
 
 session_info.show(html=False)
 
+t_start = time()
 
 #In this script the marginal vectors are of dimension 2
 
@@ -46,7 +48,7 @@ marginal_cov_grid = grid_margevar_OU(t_grid = time_grid, K=K, L=L, A_0=A_0)
 n_sample = 10
 
 
-# %% Sampling from the true diffusion
+# Sampling from the true diffusion
 
 print('Sampling from the true diffusion')
 
@@ -61,7 +63,7 @@ for it, n_marg in enumerate(n_marg_grid):
     sample = sample_markov_bicoupling(loc_time_grid, couple_grid_OU, 
                                       size_sample=n_sample, init='deter') 
     sample_truepath_time.append(sample)
-#%%  Display paths of the diffusion
+# Display paths of the diffusion
 
 #3D display
 
@@ -102,7 +104,7 @@ for it, n_marg in enumerate(n_marg_grid):
 
 
 
-#%% Impact of time discretization for independent, Brownian motion,
+# Impact of time discretization for independent, Brownian motion,
 # fractional Brownian motion, and heat kernel chosen as reference couplings
 
 init_cov = 10*np.eye(2)          # Covariance at time zero
@@ -186,7 +188,7 @@ for it, n_marg in enumerate(n_marg_grid):
                                               init='deter')
     sample_heat_time.append(path_eot_heat)
     
-#%% Display paths
+# Display paths
 
 fig = plt.figure(figsize=(18,11))
 
@@ -271,7 +273,7 @@ for it, n_marg in enumerate(n_marg_grid):
     plt.savefig('../Figures_EOTReference/2DPath_heat_ref_timediscr.pdf', 
                 format='pdf')
 
-# %% 3D display of paths built from entropic OT couplings 
+#  3D display of paths built from entropic OT couplings 
 k = 0 #scenario for the number of marginals: 0 -> 100, 1 -> 500, 2 -> 1000
 time_grid = np.linspace(time_init, time_final, num=n_marg_grid[k])
 
@@ -353,4 +355,5 @@ ax.set_title("Heat kernel reference"
 plt.savefig('../Figures_EOTReference/Paths_3D_heat_ref.pdf',
             format='pdf')
 
-
+print('Time to run the script :')
+print(time()-t_start)
