@@ -15,13 +15,13 @@ from scipy.linalg import pinv
 from numpy.linalg import eigh
 from time import time
 import sys
-sys.path.append('../Functions/')
+sys.path.append('../Functions')
 from Functions_Gauss_Process_Sampling import *
 from Functions_EOT_Ref_Coupling import *
 import random
 random.seed(1)
 
-session_info.show(html=False)
+#session_info.show(html=False)
 
 t_start = time()
 

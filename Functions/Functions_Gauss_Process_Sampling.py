@@ -133,7 +133,7 @@ def kernel_fBm(t_min, t_max, H=1/2):
     It is rescaled in order to have constant marginal variance equal to one.
     """
     temp = (t_max+1)**(2*H) + (t_min+1)**(2*H) - (t_max-t_min)**(2*H)
-    const = 2 * (t_max+1)**(2*H)
+    const = 2 * (t_max+1)**(H)*(t_min+1)**(H)
     return temp/const
 
 def couple_cov_fBm(t_min, t_max, H=1/2):

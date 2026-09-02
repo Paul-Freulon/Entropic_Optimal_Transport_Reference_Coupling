@@ -16,7 +16,7 @@ sys.path.append('../Functions')
 from Functions_EOT_Ref_Coupling import *
 from scipy.stats import multivariate_normal
 
-session_info.show(html=False)
+#session_info.show()
 
 # In this script we compute the Gaussian entropic optimal transport for 
 # a set of different regularization parameters. For illustration purposes,
